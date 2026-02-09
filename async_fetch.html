@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+    </head>
+    <body>
+        <script>
+            
+            async function request(url, option = {}) {
+                const response = await fetch(url, option);
+                const result = await response.json();
+                
+                return result.users;
+            }
+            
+            request('data.json').then(console.log);
+            
+        </script>
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <p id="valasz"></p>
+    <script>
+        async function nevnapok() {
+            const response = await
+                fetch("https://nameday.abalin.net/api/V1/today");
+            const nevek = await response.json();
+            document.getElementById("valasz").innerHTML = JSON.stringify(nevek.data);
+        }
+        nevnapok();
+    </script>
+</body>
+
+</html>
