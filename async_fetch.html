@@ -1,24 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
-    </head>
-    <body>
-        <script>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <p></p>
+    <p id="valasz"></p>
+    <button id = "nevnap_lekeres">Névnapok lekérése</button>
+
+    <form id="datum_form">
+        <label for="honap">Hónap</label>
+        <input type="number" id="honap" name="honap" min="1" max="12" required>
+        <label for="nap">Nap   </label>
+        <input type="number" id="nap" name="nap" min="1" max="31"></label><br>
+        <button type="submit">Keresés</button>
+    </form>
+        
+    <p id = "post_valasz"></p>
+
+    <script>
+        async function nevnapok() {
+            const response = await
+                fetch("https://nameday.abalin.net/api/V2/today");
+            const nevek = await response.json();
+            document.getElementById("valasz").innerHTML = nevek.data.hu;
+        }
+
+        document.getElementById("nevnap_lekeres").addEventListener("click", nevnapok);
+        async function nevnapPost(nap, honap) {
+            const data = {
+                "day": nap,
+                "month": honap
+            }
+
+            const response = await
+                fetch("https://nameday.abalin.net/api/V2/date", {
+                    method: "POST",
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'                    
+                    },
+                    body: JSON.stringify(data)
+                });
+
+
+            const nevek = await response.json();
+            console.log(nevek);
             
-            async function request(url, option = {}) {
-                const response = await fetch(url, option);
-                const result = await response.json();
-                
-                return result.users;
+            nevek_str = "";
+            for (const property in nevek.data) {
+                nevek_str += (`${property}: ${nevek.data[property]}<br>`);
             }
             
-            request('data.json').then(console.log);
+            document.getElementById("post_valasz").innerHTML = nevek_str;
+        }
+        
+        function nevnapMegjelenites(event) {
+            event.preventDefault();
+            const nap = document.getElementById("nap").value;
+            const honap = document.getElementById("honap").value;
             
-        </script>
+            console.log(nap, honap);
+            nevnapPost(nap, honap);
+        }
+        document.getElementById("datum_form").addEventListener("submit", nevnapMegjelenites);
+        nevnapPost();
+
+                
+                
+            
+        
 
     </script>
+
 </body>
+
 </html>

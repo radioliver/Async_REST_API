@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+  <form id="nev_form">
+        <label for="nev">Név:</label>
+        <input type="text" id="nev" required>
+        <button type="submit">Keresés</button>
+    </form>
+
+    <p id="nev_valasz"></p>
+    <script>
+
+        async function nevnapKereses(nev) {
+
+    const response = await fetch(
+        "https://nameday.abalin.net/api/V2/date",
+        {
+            method: "POST",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                name: nev
+            })
+        }
+    );
+
+    const adat = await response.json();
+    console.log(adat);
+
+    
+
+    let eredmeny = "";
+
+    adat.data.forEach(elem => {
+        eredmeny += `
+            ${elem.name} névnapja: 
+            ${elem.day}. ${elem.month}.<br>
+        `;
+    });
+
+    document.getElementById("nev_valasz").innerHTML = eredmeny;
+}
+
+
+
+        function nevKeresesEvent(event) {
+            event.preventDefault();
+
+            const nev = document.getElementById("nev").value;
+            nevnapKereses(nev);
+        }
+
+        document.getElementById("nev_form").addEventListener("submit", nevKeresesEvent);
+
+    </script>
+    
+
+</body>
+</html>
